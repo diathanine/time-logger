@@ -32,3 +32,23 @@
         size_hint_y: None
         height: self.minimum_height
         orientation: 'vertical'
+
+
+<TimerScreen>:
+    BoxLayout:
+        orientation: 'vertical'
+        Timer:
+        Button:
+            text: 'view time sheet'
+            on_press: root.manager.current = 'sheet'
+
+<DataScreen>:
+    bodge: bodge
+    on_enter: self.bodge.view.load_data()
+    BoxLayout:
+        orientation: 'vertical'
+        Bodge:
+            id: bodge
+        Button:
+            text: 'back to timer'
+            on_press: root.manager.current = 'timer'

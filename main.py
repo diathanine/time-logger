@@ -8,6 +8,7 @@ from kivy.uix.recycleview import RecycleView
 from kivy.properties import StringProperty, BooleanProperty, NumericProperty, ObjectProperty
 
 from kivy.clock import Clock
+from kivy.uix.screenmanager import ScreenManager, Screen
 
 import time
 import csv
@@ -75,7 +76,6 @@ class Timer(BoxLayout):
         with open("log_cache.csv", 'a', newline='') as file:
             writer = csv.writer(file)
             writer.writerow(data)
-        print(data)
 
 
 class Row(GridLayout):
@@ -93,17 +93,34 @@ class Row(GridLayout):
 class RowViewer(RecycleView):
     def __init__(self, **kwargs):
         super().__init__()
-        self.data = self.load_data()
+        self.load_data()
         # self.data = [{'start_time':str(x), 'end_time':str(x), 'title':str(x), 'note':str(x)} for x in range(5)]
 
     def load_data(self):
+        print('LOADING')
         with open("log_cache.csv", 'r', newline ='') as file:
             reader = csv.DictReader(file, fieldnames = ['start_time', 'end_time', 'title', 'note'])
             data = [{'start_time':'start_time', 'end_time':'end_time', 'title':'title', 'note':'note'}]
             for row in reader:
                 data.append(row)
-            return data
+            self.data = data
 
+class TimerScreen(Screen):
+    """docstring for TimerScreen."""
+    pass
+
+class DataScreen(Screen):
+    bodge = ObjectProperty(None)
+    """docstring for DataScreen."""
+    pass
+
+class Bodge(BoxLayout):
+    view = ObjectProperty(None)
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        rows =RowViewer()
+        self.view = rows
+        self.add_widget(rows)
 
 class MainApp(App):
     """
@@ -118,10 +135,10 @@ class MainApp(App):
     """
 
     def build(self):
-        timer = Timer()
-        # sheet = LogViewer()
-        # return sheet
-        return RowViewer()
+        screens = ScreenManager()
+        screens.add_widget( TimerScreen(name='timer') )
+        screens.add_widget( DataScreen(name='sheet') )
+        return screens
 
 if __name__ == '__main__':
     MainApp().run()
