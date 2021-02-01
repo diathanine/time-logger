@@ -1,0 +1,16 @@
+<Timer>:
+    button: start_stop_button
+    TextInput:
+        id: title
+        text: root.title
+        multiline: False
+    TextInput:
+        id: note
+        text: root.note
+    Label:
+        id: timer_display
+        text: str(root.elapsed_time)
+    Button:
+        id: start_stop_button
+        text: root.button_function_text
+        on_press: root.button_handler()
