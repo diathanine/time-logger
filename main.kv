@@ -14,3 +14,21 @@
         id: start_stop_button
         text: root.button_function_text
         on_press: root.button_handler()
+<Row>:
+    Label:
+        text: root.start_time
+    Label:
+        text: root.end_time
+    Label:
+        text: root.title
+    Label:
+        text: root.note
+
+<RowViewer>:
+    viewclass: 'Row'
+    RecycleBoxLayout:
+        default_size: None, dp(100)
+        default_size_hint: 1, None
+        size_hint_y: None
+        height: self.minimum_height
+        orientation: 'vertical'

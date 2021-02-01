@@ -2,6 +2,9 @@ from kivy.app import App
 
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.gridlayout import GridLayout
+from kivy.uix.widget import Widget
+from kivy.uix.recycleview import RecycleView
+
 from kivy.properties import StringProperty, BooleanProperty, NumericProperty, ObjectProperty
 
 from kivy.clock import Clock
@@ -75,6 +78,33 @@ class Timer(BoxLayout):
         print(data)
 
 
+class Row(GridLayout):
+    """docstring for Row."""
+    start_time = StringProperty('start')
+    end_time = StringProperty('end')
+    title = StringProperty('title')
+    note = StringProperty('note')
+
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        self.cols = 4
+
+
+class RowViewer(RecycleView):
+    def __init__(self, **kwargs):
+        super().__init__()
+        self.data = self.load_data()
+        # self.data = [{'start_time':str(x), 'end_time':str(x), 'title':str(x), 'note':str(x)} for x in range(5)]
+
+    def load_data(self):
+        with open("log_cache.csv", 'r', newline ='') as file:
+            reader = csv.DictReader(file, fieldnames = ['start_time', 'end_time', 'title', 'note'])
+            data = [{'start_time':'start_time', 'end_time':'end_time', 'title':'title', 'note':'note'}]
+            for row in reader:
+                data.append(row)
+            return data
+
+
 class MainApp(App):
     """
     app will have two screens:
@@ -89,7 +119,9 @@ class MainApp(App):
 
     def build(self):
         timer = Timer()
-        return timer
+        # sheet = LogViewer()
+        # return sheet
+        return RowViewer()
 
 if __name__ == '__main__':
     MainApp().run()
